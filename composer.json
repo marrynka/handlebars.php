@@ -1,18 +1,14 @@
 {
-    "name": "xamin/handlebars.php",
+    "name": "marrynka/handlebars.php",
     "description": "Handlebars processor for php",
-    "homepage": "https://github.com/XaminProject/handlebars.php",
+    "homepage": "https://github.com/marrynka/handlebars.php",
     "type": "library",
     "minimum-stability": "dev",
     "prefer-stable": true,
     "license": "MIT",
     "authors": [
         {
-            "name": "fzerorubigd",
-            "email": "fzerorubigd@gmail.com"
-        },
-        {
-            "name": "Behrooz Shabani (everplays)",
+            "name": "Maria something",
             "email": "everplays@gmail.com"
         }
     ],
