@@ -92,14 +92,12 @@ class Disk implements Cache
     {
         $path = $this->_getPath($name);
         if(file_exists($path)){
-            $file = fopen($path,"r");
+            $file = fopen($path, "r");
             $ttl = fgets($file);
             $ctime = filectime($path);
             $time = time();
             fclose($file);
-            if($ttl == -1) {
-                return false;
-            } else if($ttl > 0 && $time - $ctime > $ttl) {
+            if($ttl == -1 || ($ttl > 0 && $time - $ctime > $ttl)) {
                 unlink($path);
                 return false;
             } else {

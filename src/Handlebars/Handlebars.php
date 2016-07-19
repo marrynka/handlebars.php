@@ -353,7 +353,7 @@ class Handlebars
      *
      * @return void
      */
-    public function setTtl(int $ttl)
+    public function setTtl($ttl)
     {
         $this->_ttl = $ttl;
     }
