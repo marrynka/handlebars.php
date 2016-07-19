@@ -50,11 +50,12 @@ class APC implements Cache
     }
 
     /**
-     * Get cache for $name if exist.
+     * Get cache for $name if exist
+     * and if the cache is not older than defined TTL.
      *
      * @param string $name Cache id
      *
-     * @return mixed data on hit, boolean false on cache not found
+     * @return mixed data on hit, boolean false on cache not found/expired
      */
     public function get($name)
     {
@@ -70,12 +71,13 @@ class APC implements Cache
      *
      * @param string $name  cache id
      * @param mixed  $value data to store
+     * @param int $ttl time to live for cache entry
      *
      * @return void
      */
-    public function set($name, $value)
+    public function set($name, $value, $ttl = 0)
     {
-        apc_store($this->_getKey($name), $value);
+        apc_store($this->_getKey($name), $value, $ttl);
     }
 
     /**

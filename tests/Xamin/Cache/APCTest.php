@@ -38,6 +38,7 @@ class APCTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
+        \Handlebars\Autoloader::register();
         if ( ! extension_loaded('apc') || false === @apc_cache_info()) {
             $this->markTestSkipped('The ' . __CLASS__ .' requires the use of APC');
         }
@@ -92,9 +93,26 @@ class APCTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(20, $driver->get('foo'));
 
         $driver->set('foo', array(22));
+
         $this->assertEquals(array(22), $driver->get('foo'));
 
         $driver->remove('foo');
         $this->assertEquals(false, $driver->get('foo'));
+    }
+
+    /**
+     * Test ttl
+     *
+     * @return void
+     */
+    public function testTtl()
+    {
+        $driver = $this->_getCacheDriver();
+
+        $driver->set('foo', 10, -1);
+        $this->assertEquals(false, $driver->get('foo'));
+
+        $driver->set('foo', 20, 3600);
+        $this->assertEquals(20, $driver->get('foo'));
     }
 }

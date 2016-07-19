@@ -86,6 +86,11 @@ class Handlebars
     private $_cache;
 
     /**
+     * @var int time to live parameter for the cache usage
+     */
+    private $_ttl = 0;
+
+    /**
      * @var string the class to use for the template
      */
     private $_templateClass = 'Handlebars\\Template';
@@ -136,6 +141,10 @@ class Handlebars
 
         if (isset($options['cache'])) {
             $this->setCache($options['cache']);
+        }
+
+        if (isset($options['ttl'])) {
+            $this->setTtl($options['ttl']);
         }
 
         if (isset($options['template_class'])) {
@@ -335,6 +344,28 @@ class Handlebars
         }
 
         return $this->_cache;
+    }
+
+    /**
+     * Set time to live for the used cache
+     *
+     * @param int $ttl
+     *
+     * @return void
+     */
+    public function setTtl(int $ttl)
+    {
+        $this->_ttl = $ttl;
+    }
+
+    /**
+     * Get ttl
+     *
+     * @return int
+     */
+    public function getTtl()
+    {
+        return $this->_ttl;
     }
 
     /**
@@ -558,7 +589,7 @@ class Handlebars
         if ($tree === false) {
             $tokens = $this->getTokenizer()->scan($source);
             $tree = $this->getParser()->parse($tokens);
-            $this->getCache()->set($hash, $tree);
+            $this->getCache()->set($hash, $tree, $this->_ttl);
         }
 
         return $tree;

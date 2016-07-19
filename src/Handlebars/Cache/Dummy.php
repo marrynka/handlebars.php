@@ -55,10 +55,14 @@ class Dummy implements Cache
      *
      * @param string $name  cache id
      * @param mixed  $value data to store
+     * @param int $ttl time to live
+     *
+     * $ttl is ignored since the cache is implemented
+     * by an array and lives only inside one request
      *
      * @return void
      */
-    public function set($name, $value)
+    public function set($name, $value, $ttl = 0)
     {
         $this->_cache[$name] = $value;
     }

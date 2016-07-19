@@ -81,18 +81,37 @@ class Disk implements Cache
     }
 
     /**
-     * Get cache for $name if it exists.
+     * Get cache for $name if it exists
+     * and if the cache is not older than defined TTL.
      *
      * @param string $name Cache id
      *
-     * @return mixed data on hit, boolean false on cache not found
+     * @return mixed data on hit, boolean false on cache not found/expired
      */
     public function get($name)
     {
         $path = $this->_getPath($name);
+        if(file_exists($path)){
+            $file = fopen($path,"r");
+            $ttl = fgets($file);
+            $ctime = filectime($path);
+            $time = time();
+            fclose($file);
+            if($ttl == -1) {
+                return false;
+            } else if($ttl > 0 && $time - $ctime > $ttl) {
+                unlink($path);
+                return false;
+            } else {
+                $offset = strlen((string) $ttl);
+                $serialized_data = file_get_contents($path, false, null, $offset);
+                $data = unserialize($serialized_data);
+                return $data;
+            }
 
-        return (file_exists($path)) ?
-            unserialize(file_get_contents($path)) : false;
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -100,14 +119,15 @@ class Disk implements Cache
      *
      * @param string $name  cache id
      * @param mixed  $value data to store
+     * @param int $ttl time to live for cache entry
      *
      * @return void
      */
-    public function set($name, $value)
+    public function set($name, $value, $ttl = 0)
     {
         $path = $this->_getPath($name);
 
-        file_put_contents($path, serialize($value));
+        file_put_contents($path, $ttl."\n".serialize($value));
     }
 
     /**
