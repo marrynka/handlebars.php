@@ -9,6 +9,7 @@
  * @package   Handlebars
  * @author    Joey Baker <joey@byjoeybaker.com>
  * @author    Behrooz Shabani <everplays@gmail.com>
+ * @author    Mária Šormanová <maria.sormanova@gmail.com>
  * @copyright 2013 (c) Meraki, LLP
  * @copyright 2013 (c) Behrooz Shabani
  * @license   MIT <http://opensource.org/licenses/MIT>
@@ -67,11 +68,13 @@ class APC implements Cache
     }
 
     /**
-     * Set a cache
+     * Set a cache with $ttl, if present
+     * If $ttl set to -1, the cache expires immediately
+     * If $ttl set to 0 (default), cache is never purged
      *
      * @param string $name  cache id
      * @param mixed  $value data to store
-     * @param int $ttl time to live for cache entry
+     * @param int    $ttl   time to live in seconds
      *
      * @return void
      */

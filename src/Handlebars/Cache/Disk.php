@@ -9,6 +9,7 @@
  * @package   Handlebars
  * @author    Alex Soncodi <alex@brokerloop.com>
  * @author    Behrooz Shabani <everplays@gmail.com>
+ * @author    Mária Šormanová <maria.sormanova@gmail.com>
  * @copyright 2013 (c) Brokerloop, Inc.
  * @copyright 2013 (c) Behrooz Shabani
  * @license   MIT <http://opensource.org/licenses/MIT>
@@ -25,6 +26,7 @@ use Handlebars\Cache;
  * @category  Xamin
  * @package   Handlebars
  * @author    Alex Soncodi <alex@brokerloop.com>
+ * @author    Mária Šormanová <maria.sormanova@gmail.com>
  * @copyright 2013 (c) Brokerloop, Inc.
  * @license   MIT <http://opensource.org/licenses/MIT>
  * @version   Release: @package_version@
@@ -91,33 +93,31 @@ class Disk implements Cache
     public function get($name)
     {
         $path = $this->_getPath($name);
-        if(file_exists($path)){
+        $output = false;
+        if (file_exists($path)) {
             $file = fopen($path, "r");
             $ttl = fgets($file);
             $ctime = filectime($path);
             $time = time();
-            fclose($file);
-            if($ttl == -1 || ($ttl > 0 && $time - $ctime > $ttl)) {
+            if ($ttl == -1 || ($ttl > 0 && $time - $ctime > $ttl)) {
                 unlink($path);
-                return false;
             } else {
-                $offset = strlen((string) $ttl);
-                $serialized_data = file_get_contents($path, false, null, $offset);
-                $data = unserialize($serialized_data);
-                return $data;
+                $serialized_data = fread($file, filesize($path));
+                $output = unserialize($serialized_data);
             }
-
-        } else {
-            return false;
+            fclose($file);
         }
+        return $output;
     }
 
     /**
-     * Set a cache
+     * Set a cache with $ttl, if present
+     * If $ttl set to -1, the cache expires immediately
+     * If $ttl set to 0 (default), cache is never purged
      *
      * @param string $name  cache id
      * @param mixed  $value data to store
-     * @param int $ttl time to live for cache entry
+     * @param int    $ttl   time to live in seconds
      *
      * @return void
      */
@@ -125,7 +125,7 @@ class Disk implements Cache
     {
         $path = $this->_getPath($name);
 
-        file_put_contents($path, $ttl."\n".serialize($value));
+        file_put_contents($path, $ttl.PHP_EOL.serialize($value));
     }
 
     /**

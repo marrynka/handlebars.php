@@ -10,6 +10,7 @@
  * @author    fzerorubigd <fzerorubigd@gmail.com>
  * @author    Behrooz Shabani <everplays@gmail.com>
  * @author    Jeff Turcotte <jeff.turcotte@gmail.com>
+ * @author    Mária Šormanová <maria.sormanova@gmail.com>
  * @copyright 2010-2012 (c) Justin Hileman
  * @copyright 2012 (c) ParsPooyesh Co
  * @copyright 2013 (c) Behrooz Shabani
@@ -86,7 +87,9 @@ class Handlebars
     private $_cache;
 
     /**
-     * @var int time to live parameter for the cache usage
+     * @var int time to live parameter in seconds for the cache usage
+     *          default set to 0 which means that entries stay in cache
+     *          forever and are never purged
      */
     private $_ttl = 0;
 
@@ -349,7 +352,7 @@ class Handlebars
     /**
      * Set time to live for the used cache
      *
-     * @param int $ttl
+     * @param int $ttl time to live in seconds
      *
      * @return void
      */
@@ -576,7 +579,7 @@ class Handlebars
     }
 
     /**
-     * try to tokenize source, or get them from cache if available
+     * Try to tokenize source, or get them from cache if available
      *
      * @param string $source handlebars source code
      *

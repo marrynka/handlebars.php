@@ -1,4 +1,30 @@
 <?php
+/**
+ * This file is part of Handlebars-php
+ * Base on mustache-php https://github.com/bobthecow/mustache.php
+ *
+ * PHP version 5.3
+ *
+ * @category  Xamin
+ * @package   Handlebars
+ * @author    Mária Šormanová <maria.sormanova@gmail.com>
+ * @copyright 2016 (c) Mária Šormanová
+ * @license   MIT <http://opensource.org/licenses/MIT>
+ * @version   GIT: $Id$
+ * @link      http://xamin.ir
+ */
+
+/**
+ * Test of Disk cache driver
+ *
+ * @category   Xamin
+ * @package    Handlebars
+ * @subpackage Test
+ * @author     Mária Šormanová <maria.sormanova@gmail.com>
+ * @license    MIT <http://opensource.org/licenses/MIT>
+ * @version    Release: @package_version@
+ * @link       http://xamin.ir
+ */
 
 class DiskTest extends \PHPUnit_Framework_TestCase
 {
@@ -15,9 +41,9 @@ class DiskTest extends \PHPUnit_Framework_TestCase
     /**
      * Return the new driver
      *
-     * @param null|string $prefix optional key prefix, defaults to null
+     * @param string $path folder where the cache is located
      *
-     * @return \Handlebars\Cache\APC
+     * @return \Handlebars\Cache\Disk
      */
     private function _getCacheDriver( $path = '')
     {
@@ -25,7 +51,7 @@ class DiskTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test with cache prefix
+     * Test the Disk cache
      *
      * @return void
      */
@@ -53,24 +79,6 @@ class DiskTest extends \PHPUnit_Framework_TestCase
         
         rmdir($cache_dir);
     }
-
-    
-    
-    /**
-     * Test ttl
-     *
-     * @return void
-     */
-    /*public function testTtl()
-    {
-        $driver = $this->_getCacheDriver();
-        
-        $driver->set('foo', 10, -1);
-        $this->assertEquals(false, $driver->get('foo'));
-
-        $driver->set('foo', 20, 10);
-        $this->assertEquals(20, $driver->get('foo'));
-    }*/
 }
 
 ?>
