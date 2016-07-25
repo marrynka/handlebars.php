@@ -15,6 +15,12 @@ then run:
 
 `$ composer install`
 
+upgrade to use TTL:
+
+if you are upgrading to the new library version which uses TTL with Disk cache,
+first do not forget to delete all the files in the cache directory
+created by older versions, since the data structure has changed.
+
 usage
 -----
 
